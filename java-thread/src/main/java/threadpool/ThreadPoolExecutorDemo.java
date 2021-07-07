@@ -1,12 +1,11 @@
 package threadpool;
 
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * @author lucky
+ * 通常 注册JVM钩子函数自动关闭线程池
+ * 混合型的线程数一般 核数*10即可
  */
 public class ThreadPoolExecutorDemo {
 
@@ -33,10 +32,30 @@ public class ThreadPoolExecutorDemo {
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(1,
                 2,
                 10, TimeUnit.DAYS,
-                new ArrayBlockingQueue<Runnable>(10),
+                // LinkedBlockingQueue 默认无界
+                new LinkedBlockingQueue<>(10),
                 r -> new Thread());
 
+
         threadPoolExecutor.allowCoreThreadTimeOut(true);
+        /**
+         *  （1）如果当前工作线程数量小于核心线程数量，执行器总是优先创建一个任务线程，而不是从线程队列中获取一个空闲线程。
+         *
+         *  （2）如果线程池中总的任务数量大于核心线程池数量，新接收的任务将被加入阻塞队列中，一直到阻塞队列已满。
+         *  在核心线程池数量已经用完、阻塞队列没有满的场景下，线程池不会为新任务创建一个新线程。
+         *
+         *  （3）当完成一个任务的执行时，执行器总是优先从阻塞队列中获取下一个任务，并开始执行，
+         *  一直到阻塞队列为空，其中所有的缓存任务被取光。
+         *
+         *  （4）在核心线程池数量已经用完、阻塞队列也已经满了的场景下，如果线程池接收到新的任务，
+         *  将会为新任务创建一个线程（非核心线程），并且立即开始执行新任务。
+         *
+         *  （5）在核心线程都用完、阻塞队列已满的情况下，一直会创建新线程去执行新任务，直到池内的线程总数超出maximumPoolSize。
+         *  如果线程池的线程总数超过maximumPoolSize，线程池就会拒绝接收任务，当新任务过来时，会为新任务执行拒绝策略。
+        **/
+
+
     }
+
 
 }
