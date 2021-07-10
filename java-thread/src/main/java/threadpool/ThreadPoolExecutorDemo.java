@@ -34,7 +34,8 @@ public class ThreadPoolExecutorDemo {
                 10, TimeUnit.DAYS,
                 // LinkedBlockingQueue 默认无界
                 new LinkedBlockingQueue<>(10),
-                r -> new Thread());
+                r -> new Thread(),
+                new ThreadPoolExecutor.AbortPolicy());
 
 
         threadPoolExecutor.allowCoreThreadTimeOut(true);
