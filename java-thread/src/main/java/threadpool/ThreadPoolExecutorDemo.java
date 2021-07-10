@@ -21,12 +21,12 @@ public class ThreadPoolExecutorDemo {
          *
          *  （1）当在线程池接收到新任务，并且当前工作线程数少于corePoolSize时，
          *  即使其他工作线程处于空闲状态，也会创建一个新线程来处理该请求，直到线程数达到corePoolSize。
+         *
          *  （2）如果当前工作线程数多于corePoolSize数量，但小于maximumPoolSize数量，
          *  那么仅当任务排队队列已满时才会创建新线程。通过设置corePoolSize和maximumPoolSize相同，
          *  可以创建一个固定大小的线程池。
+         *
          *  （3）当maximumPoolSize被设置为无界值（如Integer.MAX_VALUE）时，线程池可以接收任意数量的并发任务。
-         *
-         *
          *
         **/
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(1,
@@ -57,6 +57,5 @@ public class ThreadPoolExecutorDemo {
 
 
     }
-
 
 }
